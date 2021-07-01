@@ -1,0 +1,8 @@
+first step to publish docker image in docker hub. 
+       install docker pipeline plugin 
+       next step --> go to pipeline script and generate script for withdockerRegistry and provide your full dockerhub repo url and generate and don't provide url
+       jenkinspipleine script in build make sure you tag with the name that you have in dockerhub repo 
+            (docker build and docker tag )
+            docker publish stage --> docker push < image name > <dockerhub repo name:tag>
+                                     docker push <image name> <dockerhub repo name :$BUILD_NUMBER>
+                                     
