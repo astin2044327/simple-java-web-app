@@ -4,7 +4,6 @@ stages {
 /*stage ('git checkout') {
 steps {
 checkout([$class: 'GitSCM', branches: [[name: '/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/astin2044327/sample-javaapp.git']]])
-
    }
    }
    */
@@ -12,7 +11,9 @@ checkout([$class: 'GitSCM', branches: [[name: '/main']], extensions: [], userRem
    stage ('docker build') {
    steps {
     
-   sh 'docker build -t java_app:v1 .'
+   sh 'docker build -t java_web:latest .'
+   sh 'docker tag java_web panthinp3/java_web:latest'
+   sh 'docker tag java_web panthinp3/java_web:$BUILD_NUMBER'
    
    
    }
@@ -29,16 +30,22 @@ checkout([$class: 'GitSCM', branches: [[name: '/main']], extensions: [], userRem
    
    stage('Deploy our image') {
         steps{
-          withDockerRegistry([credentialsId: "docker", url: ""]){
-            sh 'docker push panthinp3/java_web:v1'
+           
+         /*  withCredentials([usernameColonPassword(credentialsId: 'docker', variable: 'docker')]) {
+            sh 'docker push panthinp3/java_web:latest'
             sh 'docker push panthinp3/java_web:$BUILD_NUMBER'
-    }
-  }      
-}
+         }*/
+         withDockerRegistry(credentialsId: 'docker', url: '') {
+               sh 'docker push panthinp3/java_web:latest'
+               sh 'docker push panthinp3/java_web:$BUILD_NUMBER'
+    
+            }
+         }      
+      }
    
    
    
    
    }
-   }
+ }
    
